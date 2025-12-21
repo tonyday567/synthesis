@@ -1,0 +1,282 @@
+* synthesis
+#+begin_src haskell-ng :results output
+:r
+
+:set -XNoImplicitPrelude
+:set -XImportQualifiedPost
+:set -Wno-type-defaults
+:set -Wno-name-shadowing
+:set -XOverloadedLabels
+:set -XOverloadedStrings
+:set -XTupleSections
+:set -XQuasiQuotes
+
+-- base, text & bytestring encoding (compatability check, also)
+import Prelude as P
+import NumHask.Prelude qualified as N
+import NumHask.Space qualified as N
+import Control.Category ((>>>))
+import Data.Function
+import Data.Maybe
+import Data.Bool
+import Data.List qualified as List
+import Control.Monad
+import Data.Bifunctor
+import Data.Text qualified as T
+
+-- prettyprinter (dev help)
+import Prettyprinter
+
+-- common chart-svg imports
+import Chart
+import Prettychart
+import Chart.Examples
+import Optics.Core hiding ((|>),(<|))
+import Control.Lens qualified as Lens
+import Data.Data.Lens qualified as Lens
+
+-- random variates
+import qualified Data.Vector.Unboxed as VU
+import System.Random.Stateful
+import System.Random.MWC
+import System.Random.MWC.Distributions
+
+-- dev helpers
+import Perf
+import Flow
+import Data.FormatN
+import Data.Mealy
+import Data.Mealy.Simulate
+
+-- initialize a random seed
+-- uniformRM (0,1) g :: IO Double
+g <- initialize $ VU.fromList [1,2,3]
+
+rend = writeChartOptions
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Build profile: -w ghc-9.12.2 -O1
+In order, the following will be built (use -v for more details):
+ - synthesis-0.1.0.0 (interactive) (lib) (configuration changed)
+Configuring library for synthesis-0.1.0.0...
+Preprocessing library for synthesis-0.1.0.0...
+GHCi, version 9.12.2: https://www.haskell.org/ghc/  :? for help
+[1 of 1] Compiling Synthesis        ( src/Synthesis.hs, interpreted )
+src/Synthesis.hs:6:1: warning: [GHC-66111] [-Wunused-imports]
+    The qualified import of ‘NumHask.Prelude’ is redundant
+      except perhaps to import instances from ‘NumHask.Prelude’
+    To import instances alone, use: import NumHask.Prelude()
+  |
+6 | import NumHask.Prelude qualified as N
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:7:1: warning: [GHC-66111] [-Wunused-imports]
+    The qualified import of ‘NumHask.Space’ is redundant
+      except perhaps to import instances from ‘NumHask.Space’
+    To import instances alone, use: import NumHask.Space()
+  |
+7 | import NumHask.Space qualified as N
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:8:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Control.Category’ is redundant
+      except perhaps to import instances from ‘Control.Category’
+    To import instances alone, use: import Control.Category()
+  |
+8 | import Control.Category ((>>>))
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:9:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Data.Function’ is redundant
+      except perhaps to import instances from ‘Data.Function’
+    To import instances alone, use: import Data.Function()
+  |
+9 | import Data.Function
+  | ^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:10:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Data.Maybe’ is redundant
+      except perhaps to import instances from ‘Data.Maybe’
+    To import instances alone, use: import Data.Maybe()
+   |
+10 | import Data.Maybe
+   | ^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:11:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Data.Bool’ is redundant
+      except perhaps to import instances from ‘Data.Bool’
+    To import instances alone, use: import Data.Bool()
+   |
+11 | import Data.Bool
+   | ^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:12:1: warning: [GHC-66111] [-Wunused-imports]
+    The qualified import of ‘Data.List’ is redundant
+      except perhaps to import instances from ‘Data.List’
+    To import instances alone, use: import Data.List()
+   |
+12 | import Data.List qualified as List
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:13:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Control.Monad’ is redundant
+      except perhaps to import instances from ‘Control.Monad’
+    To import instances alone, use: import Control.Monad()
+   |
+13 | import Control.Monad
+   | ^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:14:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Data.Bifunctor’ is redundant
+      except perhaps to import instances from ‘Data.Bifunctor’
+    To import instances alone, use: import Data.Bifunctor()
+   |
+14 | import Data.Bifunctor
+   | ^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:15:1: warning: [GHC-66111] [-Wunused-imports]
+    The qualified import of ‘Data.Text’ is redundant
+      except perhaps to import instances from ‘Data.Text’
+    To import instances alone, use: import Data.Text()
+   |
+15 | import Data.Text qualified as T
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:18:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Prettyprinter’ is redundant
+      except perhaps to import instances from ‘Prettyprinter’
+    To import instances alone, use: import Prettyprinter()
+   |
+18 | import Prettyprinter
+   | ^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:21:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Chart’ is redundant
+      except perhaps to import instances from ‘Chart’
+    To import instances alone, use: import Chart()
+   |
+21 | import Chart hiding (abs)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:22:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Prettychart’ is redundant
+      except perhaps to import instances from ‘Prettychart’
+    To import instances alone, use: import Prettychart()
+   |
+22 | import Prettychart
+   | ^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:23:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Chart.Examples’ is redundant
+      except perhaps to import instances from ‘Chart.Examples’
+    To import instances alone, use: import Chart.Examples()
+   |
+23 | import Chart.Examples
+   | ^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:24:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Optics.Core’ is redundant
+      except perhaps to import instances from ‘Optics.Core’
+    To import instances alone, use: import Optics.Core()
+   |
+24 | import Optics.Core hiding ((|>),(<|))
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:25:1: warning: [GHC-66111] [-Wunused-imports]
+    The qualified import of ‘Control.Lens’ is redundant
+      except perhaps to import instances from ‘Control.Lens’
+    To import instances alone, use: import Control.Lens()
+   |
+25 | import Control.Lens qualified as Lens
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:26:1: warning: [GHC-66111] [-Wunused-imports]
+    The qualified import of ‘Data.Data.Lens’ is redundant
+      except perhaps to import instances from ‘Data.Data.Lens’
+    To import instances alone, use: import Data.Data.Lens()
+   |
+26 | import Data.Data.Lens qualified as Lens
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:29:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘System.Random.Stateful’ is redundant
+      except perhaps to import instances from ‘System.Random.Stateful’
+    To import instances alone, use: import System.Random.Stateful()
+   |
+29 | import System.Random.Stateful
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:30:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘System.Random.MWC’ is redundant
+      except perhaps to import instances from ‘System.Random.MWC’
+    To import instances alone, use: import System.Random.MWC()
+   |
+30 | import System.Random.MWC
+   | ^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:31:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘System.Random.MWC.Distributions’ is redundant
+      except perhaps to import instances from ‘System.Random.MWC.Distributions’
+    To import instances alone, use: import System.Random.MWC.Distributions()
+   |
+31 | import System.Random.MWC.Distributions
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:34:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Perf’ is redundant
+      except perhaps to import instances from ‘Perf’
+    To import instances alone, use: import Perf()
+   |
+34 | import Perf
+   | ^^^^^^^^^^^
+
+src/Synthesis.hs:35:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Flow’ is redundant
+      except perhaps to import instances from ‘Flow’
+    To import instances alone, use: import Flow()
+   |
+35 | import Flow hiding (apply)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:36:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Data.FormatN’ is redundant
+      except perhaps to import instances from ‘Data.FormatN’
+    To import instances alone, use: import Data.FormatN()
+   |
+36 | import Data.FormatN
+   | ^^^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:37:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Data.Mealy’ is redundant
+      except perhaps to import instances from ‘Data.Mealy’
+    To import instances alone, use: import Data.Mealy()
+   |
+37 | import Data.Mealy
+   | ^^^^^^^^^^^^^^^^^
+
+src/Synthesis.hs:38:1: warning: [GHC-66111] [-Wunused-imports]
+    The import of ‘Data.Mealy.Simulate’ is redundant
+      except perhaps to import instances from ‘Data.Mealy.Simulate’
+    To import instances alone, use: import Data.Mealy.Simulate()
+   |
+38 | import Data.Mealy.Simulate
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ok, one module loaded.
+Ok, one module reloaded.
+<interactive>:50:19: error: [GHC-76037]
+    Not in scope: ‘VU.fromList’
+    Note: No module named ‘VU’ is imported.
+    Suggested fix:
+      Perhaps use one of these:
+        ‘N.fromList’ (imported from NumHask.Prelude),
+        ‘N.fromList’ (imported from NumHask.Prelude),
+        ‘N.fromListN’ (imported from NumHask.Prelude)
+#+end_example
+
+#+begin_src haskell-ng :results output
+t1 = [Val 4, Val 5, Add]t1 = [Val 4, Val 5, Add]
+#+end_src

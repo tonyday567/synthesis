@@ -1,0 +1,117 @@
+cabal-version: 3.14
+name: synthesis
+version: 0.1.0.0
+license: NONE
+author: Tony Day
+maintainer: tonyday567@gmail.com
+build-type: Simple
+extra-doc-files: CHANGELOG.md
+
+common ghc-options-stanza
+  ghc-options:
+    -Wall
+    -Wcompat
+    -Widentities
+    -Wincomplete-record-updates
+    -Wincomplete-uni-patterns
+    -Wpartial-fields
+    -Wredundant-constraints
+    -Wno-deprecated-flags
+
+common mhs2024-stanza
+  default-extensions:
+    -- OverlappingInstances
+    AllowAmbiguousTypes
+    BangPatterns
+    BinaryLiterals
+    BlockArguments
+    ConstraintKinds
+    DefaultSignatures
+    DeriveAnyClass
+    DeriveDataTypeable
+    DerivingStrategies
+    DerivingVia
+    DoAndIfThenElse
+    DuplicateRecordFields
+    EmptyCase
+    EmptyDataDecls
+    EmptyDataDeriving
+    ExistentialQuantification
+    ExplicitNamespaces
+    ExtendedDefaultRules
+    FlexibleContexts
+    FlexibleInstances
+    ForeignFunctionInterface
+    FunctionalDependencies
+    GADTSyntax
+    GADTs
+    GeneralizedNewtypeDeriving
+    ImportQualifiedPost
+    IncoherentInstances
+    InstanceSigs
+    KindSignatures
+    LambdaCase
+    LiberalTypeSynonyms
+    MagicHash
+    MonoLocalBinds
+    MultiParamTypeClasses
+    MultiWayIf
+    MultilineStrings
+    NamedDefaults
+    NamedFieldPuns
+    NegativeLiterals
+    NoMonomorphismRestriction
+    NoStarIsType
+    NondecreasingIndentation
+    NumericUnderscores
+    OrPatterns
+    OverloadedRecordDot
+    OverloadedRecordUpdate
+    OverloadedStrings
+    PatternSynonyms
+    PolyKinds
+    PolymorphicComponents
+    QualifiedDo
+    RankNTypes
+    RecordWildCards
+    RecursiveDo
+    RequiredTypeArguments
+    ScopedTypeVariables
+    StandaloneDeriving
+    StandaloneKindSignatures
+    TupleSections
+    TypeApplications
+    TypeSynonymInstances
+    UndecidableInstances
+    UndecidableSuperClasses
+    UnicodeSyntax
+    ViewPatterns
+
+library
+  import: ghc-options-stanza
+  import: mhs2024-stanza
+  build-depends:
+    base >=4.14 && <5,
+    containers,
+    harpie,
+    chart-svg,
+    prettychart,
+    perf,
+    optics-core,
+    bytestring,
+    text,
+    prettyprinter,
+    vector,
+    vector-algorithms,
+    flow,
+    lens,
+    numhask,
+    numhask-space,
+    random,
+    mwc-random,
+    mealy,
+    formatn,
+
+  exposed-modules: Synthesis
+  hs-source-dirs: src
+  default-language: Haskell2010

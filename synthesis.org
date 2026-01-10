@@ -267,16 +267,12 @@ src/Synthesis.hs:38:1: warning: [GHC-66111] [-Wunused-imports]
 
 Ok, one module loaded.
 Ok, one module reloaded.
-<interactive>:50:19: error: [GHC-76037]
-    Not in scope: ‘VU.fromList’
-    Note: No module named ‘VU’ is imported.
-    Suggested fix:
-      Perhaps use one of these:
-        ‘N.fromList’ (imported from NumHask.Prelude),
-        ‘N.fromList’ (imported from NumHask.Prelude),
-        ‘N.fromListN’ (imported from NumHask.Prelude)
 #+end_example
 
 #+begin_src haskell-ng :results output
-t1 = [Val 4, Val 5, Add]t1 = [Val 4, Val 5, Add]
+t1 = [Add, Val 4, Val 5, Var "a", Add, Add]
+eval t1 (Stack [Val 0,Val 0,Val 0])
 #+end_src
+
+#+RESULTS:
+: Stack {startingTokens = [Val 9.0,Var "a",Val 0.0]}
